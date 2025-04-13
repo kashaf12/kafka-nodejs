@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  zookeeper:
+    image: zookeeper
+    ports:
+      - "2181:2181"
+  kafka:
+    image: confluentinc/cp-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    expose:
+          - "29092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  kafka-ui:
+          container_name: kafka-ui
+          image: provectuslabs/kafka-ui
+          ports:
+              - 8080:8080
+          environment:
+              DYNAMIC_CONFIG_ENABLED: true
